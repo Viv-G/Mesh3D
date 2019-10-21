@@ -6,9 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/GoogleARCore/Examples/HelloAR/Scenes/Entry.unity
+    path: Assets/GoogleARCore/Mesh3D/Scenes/Entry.unity
     guid: f6eb79bd6864b483c946f731d73775a2
   - enabled: 1
-    path: Assets/GoogleARCore/Examples/HelloAR/Scenes/HelloAR.unity
+    path: Assets/GoogleARCore/Mesh3D/Scenes/Mesh3D.unity
     guid: e6a6fa04348cb45c9b0221eb19c946da
   m_configObjects: {}
