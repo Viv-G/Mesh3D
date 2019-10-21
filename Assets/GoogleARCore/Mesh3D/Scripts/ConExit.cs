@@ -54,7 +54,7 @@
             Application.Quit();
         }
 
-        public static void SendArrayCount(int size)
+        public static bool SendArrayCount(int size)
         {
             string sizeString = size.ToString();
             byte[] ArraySizeBytes = Encoding.ASCII.GetBytes(sizeString);
@@ -67,6 +67,7 @@
             {
                 string errMessage = "ERROR_sending: " + e.Message + " " + e.ErrorCode;
                 Debug.LogError(errMessage);
+                return false;
             }
 
             try
@@ -76,14 +77,16 @@
                 string confString = Encoding.ASCII.GetString(confBuffer);
                 if ((string.Compare(confString, "CONF")) == 0){
                     Debug.Log("SUCCESFULLY SENT  AND CONFIRMED ARRAY SIZE");
+                    return true;
                 }
             }
             catch (SocketException e)
             {
                 string errMessage = "ERROR_recieving: " + e.Message + " " + e.ErrorCode;
                 Debug.LogError(errMessage);
+                return false;
             }
-
+            return false;
         }
 
         public static void SendIM(byte[] im)

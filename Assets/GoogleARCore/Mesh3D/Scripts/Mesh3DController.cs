@@ -389,25 +389,8 @@ namespace GoogleARCore.Mesh3D
         }
 
         /// <summary>
-        /// Export Images (SAVE TO DISK)
+        /// Export Images (Send to Server)
         /// </summary>
-/*        private void ExportImages()
-        {
-            var path = Application.persistentDataPath;
-            Texture2D result;
-            result = Unity.MatToTexture(output);
-            result.Apply();
-
-            byte[] im = result.EncodeToJPG(100);
-            for (var i = 0; i < CamImage.AllData.Count; i++)
-            {
-                byte[] imOut = CamImage.AllData[i];
-                string fileName = "/IMG" + i + ".jpg";
-                File.WriteAllBytes(path + fileName, imOut);
-                string messge = "Succesfully Saved Image To " + path + "\n";
-                Debug.Log(messge);
-            }
-        } */
 
         public void ExportImages()
         {
@@ -423,23 +406,27 @@ namespace GoogleARCore.Mesh3D
                 Connection.s.Close();
             }
             ConExit.ConnectOut();
-            ConExit.SendArraySize(CamImage.AllData.Count);
-            CameraIntrinsicsOutput.text = "Sending " + CamImage.AllData.Count + "Images";
-            // Loop through Mat List, Add to Texture and Save.
-            for (var i = 0; i < CamImage.AllData.Count; i++)
+
+            if (ConExit.SendArrayCount(CamImage.AllData.Count))
             {
-                Mat imOut = CamImage.AllData[i];
-                Texture2D result = Unity.MatToTexture(imOut);
-                result.Apply();
+                CameraIntrinsicsOutput.text = "Sending " + CamImage.AllData.Count + "Images";
+                // Loop through Mat List, Add to Texture and Save.
+                for (var i = 0; i < CamImage.AllData.Count; i++)
+                {
+                    Mat imOut = CamImage.AllData[i];
+                    Texture2D result = Unity.MatToTexture(imOut);
+                    result.Apply();
 
-                byte[] im = result.EncodeToJPG(100);
-                ConExit.SendIM(im);
+                    byte[] im = result.EncodeToJPG(100);
 
-                CameraIntrinsicsOutput.text = "Succesfully Sent Image " + i + "\n Remaining: " + (CamImage.AllData.Count - i);
-                //Debug.Log(messge);
-                Destroy(result);
+                    ConExit.SendIM(im);
+
+                    CameraIntrinsicsOutput.text = "Succesfully Sent Image " + i + "\n Remaining: " + (CamImage.AllData.Count - i);
+                    //Debug.Log(messge);
+                    Destroy(result);
+                }
+                CameraIntrinsicsOutput.text = "Success! Exciting...";
             }
-            CameraIntrinsicsOutput.text = "Success! Exciting...";
             //Connection.s.Close();
             ConExit.sOut.Close();
             Application.Quit();
