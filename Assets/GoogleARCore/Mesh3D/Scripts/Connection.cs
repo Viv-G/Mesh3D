@@ -21,13 +21,13 @@
 
         public static void Connect(string Host)
         {
-            Debug.Log("Establishing Connection to " + Host);
+        //    Debug.Log("Establishing Connection to " + Host);
             try
             {
                 s.Connect(Host, port);
                 if (s.Connected)
                 {
-                    Debug.Log("Connected!");
+                //    Debug.Log("Connected!");
                 }
             }
             catch (SocketException e)
@@ -35,21 +35,20 @@
                 // 10035 == WSAEWOULDBLOCK
                 if (e.NativeErrorCode.Equals(10056))
                 {
-                    Debug.LogError("Connection Already Established \n");
-                    Application.Quit();
+               //     Debug.LogError("Connection Already Established \n");
                     return;
                 }
                 else
                 {
                     string errMessage = "Disconnected: error code: " + e.NativeErrorCode;
-                    Debug.LogError(errMessage);
+                //    Debug.LogError(errMessage);
                     return;
                 }
             }
 
         }
 
-        public static void WriteString(int NPoints, string pointBuffer)
+    /*    public static void WriteString(int NPoints, string pointBuffer)
         {
 
             // Convert to Strings
@@ -70,7 +69,35 @@
             catch (SocketException e)
             {
                 string errMessage = "Disconnected: error code: " + e.NativeErrorCode;
-                Debug.LogError(errMessage);
+            //    Debug.LogError(errMessage);
+                return;
+            }
+        } */
+
+        public static void WriteString(System.Object ptsStringObj)
+        {
+            string[] ptsStringArray = (string[]) ptsStringObj;
+            // Convert to Strings
+            string numPoints = ptsStringArray[0] + " ENDN\n";
+            string buffSend = ptsStringArray[1] + " ENDP\n";
+            // Convert to Bytes
+            byte[] nSend = Encoding.ASCII.GetBytes(numPoints);
+            byte[] sBytes = Encoding.ASCII.GetBytes(buffSend);
+            int size = sBytes.Length;
+            string sizeSend = size.ToString();
+            //            Debug.LogError(sizeSend);
+            //SEND
+            try
+            {
+                s.Send(nSend);
+                s.Send(sBytes);
+            }
+            catch (SocketException e)
+            {
+                string errMessage = "Disconnected: error code: " + e.NativeErrorCode;
+                //    Debug.LogError(errMessage);
+                s.Close();
+                s.Connect(HostIP, port);
                 return;
             }
         }

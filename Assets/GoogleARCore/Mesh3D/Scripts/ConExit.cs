@@ -38,20 +38,17 @@
                 if (e.NativeErrorCode.Equals(10056))
                 {
                     Debug.LogError("Connection Already Established \n");
-                    Application.Quit();
                     return;
                 }
                 else
                 {
                     string errMessage = "Disconnected: error code: " + e.NativeErrorCode;
                     Debug.LogError(errMessage);
-                    Application.Quit();
                     return;
                 }
             }
             if (sOut == null)
                 Debug.LogError("Connection failed");
-            Application.Quit();
         }
 
         public static bool SendArrayCount(int size)
@@ -119,12 +116,12 @@
                     }
                 }
                 Debug.Log("Sucessfully Sent IMAGE ");
+                im = null;
             }
             catch (SocketException e)
             {
                 string errMessage = "ERROR_sending: " + e.Message + " " + e.ErrorCode;
                 Debug.LogError(errMessage);
-                Application.Quit();
             }
             //   Debug.Log("Sucessfully Sent IMAGE ");
             byte[] recBuf = new byte[4096];

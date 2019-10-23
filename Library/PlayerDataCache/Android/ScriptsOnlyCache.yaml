@@ -12,6 +12,7 @@ ScriptsOnlyBuild:
     - GoogleARCore.Mesh3D.DetectedPlaneGenerator
     - GoogleARCore.Mesh3D.DetectedPlaneVisualizer
     - GoogleARCore.Mesh3D.EntryScript
+    - GoogleARCore.Mesh3D.ExitScript
     - GoogleARCore.Mesh3D.Mesh3DController
     - GoogleARCore.Mesh3D.PointcloudVisualizer
     Unity.Mobile.AndroidLogcat.Editor.dll:
@@ -60,35 +61,88 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 9754}
+      Script: {instanceID: 9752}
     - Class: 114
-      Script: {instanceID: 10070}
+      Script: {instanceID: 10062}
     - Class: 114
-      Script: {instanceID: 10076}
+      Script: {instanceID: 10068}
     - Class: 114
-      Script: {instanceID: 10140}
+      Script: {instanceID: 10132}
     - Class: 114
-      Script: {instanceID: 10654}
+      Script: {instanceID: 10632}
     - Class: 114
-      Script: {instanceID: 10804}
+      Script: {instanceID: 10782}
     - Class: 114
-      Script: {instanceID: 11166}
+      Script: {instanceID: 11130}
     - Class: 114
-      Script: {instanceID: 11316}
+      Script: {instanceID: 11278}
     - Class: 114
-      Script: {instanceID: 11512}
+      Script: {instanceID: 11468}
     - Class: 114
-      Script: {instanceID: 11818}
+      Script: {instanceID: 11766}
     - Class: 114
-      Script: {instanceID: 12104}
+      Script: {instanceID: 12042}
     - Class: 114
-      Script: {instanceID: 12308}
+      Script: {instanceID: 12244}
     - Class: 114
-      Script: {instanceID: 12928}
+      Script: {instanceID: 12848}
     - Class: 114
-      Script: {instanceID: 12960}
+      Script: {instanceID: 12880}
     - Class: 114
-      Script: {instanceID: 12984}
+      Script: {instanceID: 12902}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    Assets/GoogleARCore/Mesh3D/Scenes/Exit.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 33
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 9752}
+    - Class: 114
+      Script: {instanceID: 10062}
+    - Class: 114
+      Script: {instanceID: 10132}
+    - Class: 114
+      Script: {instanceID: 10782}
+    - Class: 114
+      Script: {instanceID: 11468}
+    - Class: 114
+      Script: {instanceID: 12244}
+    - Class: 114
+      Script: {instanceID: 12880}
+    - Class: 114
+      Script: {instanceID: 15538}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -129,45 +183,45 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 9754}
+      Script: {instanceID: 9752}
     - Class: 114
-      Script: {instanceID: 10070}
+      Script: {instanceID: 10062}
     - Class: 114
-      Script: {instanceID: 10140}
+      Script: {instanceID: 10132}
     - Class: 114
-      Script: {instanceID: 10684}
+      Script: {instanceID: 10662}
     - Class: 114
-      Script: {instanceID: 10698}
+      Script: {instanceID: 10676}
     - Class: 114
-      Script: {instanceID: 10804}
+      Script: {instanceID: 10782}
     - Class: 114
-      Script: {instanceID: 10838}
+      Script: {instanceID: 10816}
     - Class: 114
-      Script: {instanceID: 10886}
+      Script: {instanceID: 10862}
     - Class: 114
-      Script: {instanceID: 11062}
+      Script: {instanceID: 11032}
     - Class: 114
-      Script: {instanceID: 11272}
+      Script: {instanceID: 11234}
     - Class: 114
-      Script: {instanceID: 11316}
+      Script: {instanceID: 11278}
     - Class: 114
-      Script: {instanceID: 11512}
+      Script: {instanceID: 11468}
     - Class: 114
-      Script: {instanceID: 11904}
+      Script: {instanceID: 11850}
     - Class: 114
-      Script: {instanceID: 12016}
+      Script: {instanceID: 11958}
     - Class: 114
-      Script: {instanceID: 12308}
+      Script: {instanceID: 12244}
     - Class: 114
-      Script: {instanceID: 12312}
+      Script: {instanceID: 12248}
+    - Class: 114
+      Script: {instanceID: 12388}
     - Class: 114
       Script: {instanceID: 12454}
     - Class: 114
-      Script: {instanceID: 12522}
+      Script: {instanceID: 12564}
     - Class: 114
-      Script: {instanceID: 12636}
-    - Class: 114
-      Script: {instanceID: 12960}
+      Script: {instanceID: 12880}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -427,7 +481,7 @@ ScriptsOnlyBuild:
     className: ControlPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: b6a35cb3ed6f2647ad67cae5a888527e
+      Hash: 477d50598a3ace695ac526678ba26c92
     assemblyName: Assembly-CSharp.dll
     namespaceName: GoogleARCore.Mesh3D
     className: Mesh3DController
@@ -839,8 +893,15 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
+  - hash:
+      serializedVersion: 2
+      Hash: f6ce517cfe441140f4658698ab4831e5
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: GoogleARCore.Mesh3D
+    className: ExitScript
   platform: 13
   scenePathNames:
   - Assets/GoogleARCore/Mesh3D/Scenes/Entry.unity
   - Assets/GoogleARCore/Mesh3D/Scenes/Mesh3D.unity
-  playerPath: F:/Viv/Documents/Uni/sem1_2019/FYP/unity/AR12-master/AR12.apk
+  - Assets/GoogleARCore/Mesh3D/Scenes/Exit.unity
+  playerPath: F:/Viv/Documents/Uni/sem1_2019/FYP/unity/AR12-master/AR12_Scenes.apk

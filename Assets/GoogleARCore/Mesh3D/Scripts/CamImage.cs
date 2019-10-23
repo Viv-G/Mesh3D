@@ -10,7 +10,7 @@
     public class CamImage : MonoBehaviour
     {
 
-        public static List<Mat> AllData = new List<Mat>();
+        //public static List<Mat> AllData = new List<Mat>();
 
         public static void GetCameraImage()
         {
@@ -22,9 +22,11 @@
                 // If acquiring failed, return null
                 if (!camBytes.IsAvailable)
                 {
+                    Mesh3DController.ErrorString = "camBytes Not Available.....";
                     return;
                 }
 
+                    Mesh3DController.ErrorString = "Thread Running.....";
                 // To save a YUV_420_888 image, you need 1.5*pixelCount bytes.
                 // I will explain later, why.
                 byte[] YUVimage = new byte[(int)(camBytes.Width * camBytes.Height * 1.5f)];
@@ -61,8 +63,9 @@
                 Cv2.Transpose(output, output);
                 Cv2.Flip(output, output, FlipMode.Y);
 
-               AllData.Add(output);
+               Mesh3DController.AllData.Add(output);
                pinnedArray.Free();
+               Mesh3DController.ErrorString = "Thread Sucess!";
             }
             
         }

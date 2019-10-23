@@ -195,6 +195,6 @@ namespace GoogleARCore
         internal OnChooseCameraConfigurationDelegate GetChooseCameraConfigurationCallback()
         {
             return m_OnChooseCameraConfiguration;
-        }
+        } 
     }
 }

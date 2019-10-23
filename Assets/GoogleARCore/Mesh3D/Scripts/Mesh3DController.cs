@@ -23,8 +23,10 @@ namespace GoogleARCore.Mesh3D
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Threading;
     using GoogleARCore;
     using UnityEngine;
+    using UnityEngine.SceneManagement;
     using UnityEngine.EventSystems;
     using UnityEngine.UI;
     using OpenCvSharp;
@@ -91,7 +93,7 @@ namespace GoogleARCore.Mesh3D
         /// <summary>
         /// The frame rate update interval.
         /// </summary>
-        private static float s_FrameRateUpdateInterval = 2.0f;
+        public static float s_FrameRateUpdateInterval = 1.0f;
 
         /// <summary>
         /// Current Camera Pose
@@ -118,14 +120,29 @@ namespace GoogleARCore.Mesh3D
         /// Max values for bounding box
         /// </summary>
         public static Vector3 maxVals = new Vector3(0.25f, 0.1f, .75f);
+        public static float yConst = maxVals.y;
 
         /// <summary>
         /// Default Confidence Value
         /// </summary>
         public static float setConf = 0.5f;
 
-        public static float Dplane;
+        public float Dplane;
         public static bool planeFlag = false;
+        private bool AnchorFlag = false;
+        private bool pointFlag = false;
+        private bool imFlag = false;
+        private Anchor anchorPoints;
+
+        public static List<Mat> AllData = new List<Mat>();
+        public static List<byte[]> AllBytes = new List<Byte[]>();
+
+        private Thread _t1;
+        private Thread _t2;
+
+        public Canvas CanvasMain;
+
+        public static string ErrorString;
 
 
         /// <summary>
@@ -155,15 +172,24 @@ namespace GoogleARCore.Mesh3D
             }
         }
 
+        public void Start()
+        {
+            m_OnChoseCameraConfiguration = _ChooseCameraConfiguration;
+            ARSessionManager.RegisterChooseCameraConfigurationCallback(m_OnChoseCameraConfiguration);
+            ARSessionManager.enabled = false;
+            ARSessionManager.enabled = true;
+        }
+
         /// <summary>
         /// The Unity Update() method.
         /// </summary>
         public void Update()
         {
             _UpdateApplicationLifecycle();
-            _UpdateFrameRate();
             ExportMeshPoints();
+            _UpdateFrameRate();
 
+           // Debug.Log(ErrorString);
             /// Update Camera Intrinsics///
             var cameraIntrinsics = Frame.CameraImage.ImageIntrinsics;
             string intrinsicsType = "CPU Image";
@@ -207,17 +233,19 @@ namespace GoogleARCore.Mesh3D
 
                         Vector3 pCent = detectedPlane.CenterPose.position;
                         minVals.y = (pCent.y + 0.005f);
-                        maxVals.y = (pCent.y + 2 * (maxVals.y));
+                        //maxVals.y = (pCent.y + 2 * (maxVals.y));
+                        maxVals.y = (2*yConst) + pCent.y;
 
                         Vector3 pNor = detectedPlane.CenterPose.rotation * Vector3.up;
 
-                        float Aeq = pNor.x;
-                        float Beq = pNor.y;
-                        float Ceq = pNor.z;
-                        float Deq = (pNor.x * -pCent.x) + (pNor.y * -pCent.y) + (pNor.z * -pCent.z);
-                        Dplane = Deq;
+                        /*   float Aeq = pNor.x;
+                           float Beq = pNor.y;
+                           float Ceq = pNor.z;
+                           float Deq = (pNor.x * -pCent.x) + (pNor.y * -pCent.y) + (pNor.z * -pCent.z); */
+                        Dplane = -pCent.y; //Deq;
 
-                        string message = "PLANE EQUATION IS: " + Aeq + " , " + Beq + " , " + Ceq + " , " + Deq + "\n";
+                        //string message = "PLANE EQUATION IS: " + Aeq + " , " + Beq + " , " + Ceq + " , " + Deq + "\n";
+                        string message = "PLANE EQUATION IS: "+ Dplane;
                         Debug.Log(message);
 
                         prefab = GameObjectHorizontalPlanePrefab;
@@ -236,7 +264,7 @@ namespace GoogleARCore.Mesh3D
 
                         // Make game object a child of the anchor.
                         gameObject.transform.parent = anchor.transform;
-
+                        
                         planeFlag = true;
                     }
                 }
@@ -256,7 +284,18 @@ namespace GoogleARCore.Mesh3D
                 m_RenderingFrameRate = 1000 / m_RenderingFrameTime;
                 m_FramePassedTime = 0f;
                 m_FrameCounter = 0;
-                CamImage.GetCameraImage();
+                /*if (((_t1.ThreadState & (ThreadState.Stopped | ThreadState.Unstarted)) == 0))
+                {
+                    Debug.Log("PAUSED");
+                    _t1.Join();
+                } */
+                if (imFlag)
+                {
+                    _t1.Join();
+                }
+                _t1 = new Thread(CamImage.GetCameraImage);
+                _t1.Start();
+                imFlag = true;
             }
         }
 
@@ -301,8 +340,8 @@ namespace GoogleARCore.Mesh3D
         /// <returns>The desired configuration index.</returns>
         private int _ChooseCameraConfiguration(List<CameraConfig> supportedConfigurations)
         {
-
-            if (!m_Resolutioninitialized)
+            
+           if (!m_Resolutioninitialized)
             {
                 m_HighestResolutionConfigIndex = 0;
                 m_LowestResolutionConfigIndex = 0;
@@ -341,7 +380,7 @@ namespace GoogleARCore.Mesh3D
                 return m_HighestResolutionConfigIndex;
             }
 
-            return m_LowestResolutionConfigIndex;
+            return m_LowestResolutionConfigIndex; 
         }
 
         /// <summary>
@@ -353,7 +392,7 @@ namespace GoogleARCore.Mesh3D
             if (Input.GetKey(KeyCode.Escape))
             {
                 ExportImages();
-                Application.Quit();
+             //   Application.Quit();
             }
 
             // Only allow the screen to sleep when not tracking.
@@ -379,13 +418,13 @@ namespace GoogleARCore.Mesh3D
                 m_IsQuitting = true;
                 Invoke("_DoQuit", 0.5f);
             }
-            else if (Session.Status.IsError())
+        /*    else if (Session.Status.IsError())
             {
                 _ShowAndroidToastMessage(
                     "ARCore encountered a problem connecting.  Please start the app again.");
                 m_IsQuitting = true;
                 Invoke("_DoQuit", 0.5f);
-            }
+            } */
         }
 
         /// <summary>
@@ -394,34 +433,43 @@ namespace GoogleARCore.Mesh3D
 
         public void ExportImages()
         {
+            if (imFlag)
+            {
+                _t1.Join();
+            }
+            if (pointFlag)
+            {
+                _t2.Join();
+            }
             /// Write Camera intrinsics to text file
             var path = Application.persistentDataPath;
             StreamWriter sr = new StreamWriter(path + @"/intrinsics.txt");
             sr.WriteLine(CameraIntrinsicsOutput.text);
             Debug.Log(CameraIntrinsicsOutput.text);
             sr.Close();
-
             if (Connection.s.Connected)
             {
                 Connection.s.Close();
             }
-            ConExit.ConnectOut();
+            SceneManager.LoadScene("Exit");
+            /*ConExit.ConnectOut();
 
-            if (ConExit.SendArrayCount(CamImage.AllData.Count))
+            if (ConExit.SendArrayCount(AllData.Count))
             {
-                CameraIntrinsicsOutput.text = "Sending " + CamImage.AllData.Count + "Images";
+                CameraIntrinsicsOutput.text = "Sending " + AllData.Count + "Images";
                 // Loop through Mat List, Add to Texture and Save.
-                for (var i = 0; i < CamImage.AllData.Count; i++)
+                for (var i = 0; i < AllData.Count; i++)
                 {
-                    Mat imOut = CamImage.AllData[i];
+                    Mat imOut = AllData[i];
                     Texture2D result = Unity.MatToTexture(imOut);
                     result.Apply();
 
                     byte[] im = result.EncodeToJPG(100);
+                    //AllBytes.Add(im);
 
-                    ConExit.SendIM(im);
+                     ConExit.SendIM(im);
 
-                    CameraIntrinsicsOutput.text = "Succesfully Sent Image " + i + "\n Remaining: " + (CamImage.AllData.Count - i);
+                    CameraIntrinsicsOutput.text = "Succesfully Sent Image " + i + "\n Remaining: " + (AllData.Count - i);
                     //Debug.Log(messge);
                     Destroy(result);
                 }
@@ -429,7 +477,7 @@ namespace GoogleARCore.Mesh3D
             }
             //Connection.s.Close();
             ConExit.sOut.Close();
-            Application.Quit();
+            Application.Quit(); */
         }
 
 
@@ -437,6 +485,16 @@ namespace GoogleARCore.Mesh3D
         {
             string buff = "";
             m_Track = 0;
+           // Debug.Log("1_Started Export Points");
+
+            if (AnchorFlag == false && (Session.Status == SessionStatus.Tracking)) {
+                //Vector3 AnchorVec = new Vector3(0f, maxVals.y / 2f, maxVals.z / 2f);
+                Vector3 AnchorVec = new Vector3(0f, 0f, 0f);
+                Pose AnchorPose = new Pose(AnchorVec, Quaternion.identity);
+                anchorPoints = Session.CreateAnchor(AnchorPose);
+                AnchorFlag = true;
+            //    Debug.Log("2_Set Points Anchor");
+                    }
 
             if (Frame.PointCloud.PointCount > 0 && Frame.PointCloud.IsUpdatedThisFrame)
             {
@@ -445,22 +503,24 @@ namespace GoogleARCore.Mesh3D
                 curPose = Frame.Pose;
                 string curPosePos = curPose.position.x + " " + curPose.position.y + " " + curPose.position.z + " ";
                 buff += curPosePos;
-
+           //     Debug.Log("3_Stepped into First stage (New points + > 0)");
 
                 for (int i = 0; i < Frame.PointCloud.PointCount; i++)
                 {
+                    
                     Vector3 point = Frame.PointCloud.GetPointAsStruct(i); // -UNTRANSFORMED                
                     int idPoint = Frame.PointCloud.GetPointAsStruct(i).Id;
                     float conf = Frame.PointCloud.GetPointAsStruct(i).Confidence;
+                    Vector3 pointN = anchorPoints.transform.InverseTransformPoint(point);
 
-                    if (point.x < minVals.x || point.y < minVals.y || point.z < minVals.z ||
-                        point.x > maxVals.x || point.y > maxVals.y || point.z > maxVals.z || conf < setConf)
+                    if (pointN.x < minVals.x || pointN.y < minVals.y || pointN.z < minVals.z ||
+                        pointN.x > maxVals.x || pointN.y > maxVals.y || pointN.z > maxVals.z || conf < setConf)
                     {
                         continue;
                     }
                    
-                    PointcloudVisualizer.AddPointToCache(point);
-                    string content = idPoint + " " + point.x + " " + point.y + " " + point.z + " ";
+                    PointcloudVisualizer.AddPointToCache(pointN);
+                    string content = idPoint + " " + pointN.x + " " + pointN.y + " " + pointN.z + " ";
                     buff += content;
 
                     m_Track += 1;
@@ -468,9 +528,21 @@ namespace GoogleARCore.Mesh3D
                 }
                 if (m_Track != 0)
                 {
-                    Connection.WriteString(m_Track, buff);
+               //     Debug.Log("6_Starting thread and sending pts (Mtrack > 0");
+                    string[] ptsStringArray = new string[2];
+                    ptsStringArray[0] = m_Track.ToString();
+                    ptsStringArray[1] = buff;
+                    if (pointFlag)
+                    {
+                        _t2.Join();
+                    }
+                    _t2 = new Thread(Connection.WriteString);
+                    _t2.Start(ptsStringArray);
+                    pointFlag = true;
+                   // Connection.WriteString(ptsStringArray);
+                  //  Connection.WriteString(m_Track, buff);
+                   // Debug.Log(m_Track + buff);
                 }
-
             }
         }
 
@@ -483,12 +555,10 @@ namespace GoogleARCore.Mesh3D
             {
                 Connection.s.Close();
             }
-            if (ConExit.sOut.Connected)
-            {
-                ConExit.sOut.Close();
-            }
+         
             Application.Quit();
         }
+
 
         /// <summary>
         /// Show an Android toast message.

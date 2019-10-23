@@ -68,6 +68,7 @@
     <Compile Include="Assets\GoogleARCore\Mesh3D\Scripts\DetectedPlaneGenerator.cs" />
     <Compile Include="Assets\GoogleARCore\Mesh3D\Scripts\DetectedPlaneVisualizer.cs" />
     <Compile Include="Assets\GoogleARCore\Mesh3D\Scripts\EntryScript.cs" />
+    <Compile Include="Assets\GoogleARCore\Mesh3D\Scripts\ExitScript.cs" />
     <Compile Include="Assets\GoogleARCore\Mesh3D\Scripts\Mesh3DController.cs" />
     <Compile Include="Assets\GoogleARCore\Mesh3D\Scripts\PlaneDiscoveryGuide.cs" />
     <Compile Include="Assets\GoogleARCore\Mesh3D\Scripts\PointcloudVisualizer.cs" />

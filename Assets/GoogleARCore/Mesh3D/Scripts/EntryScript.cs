@@ -16,6 +16,7 @@
         private string yVal;
         private string zVal;
         private string cVal;
+        private string imVal;
 
         // private StreamReader sRead; //= new StreamWriter(path, append: true);
         //private StreamWriter sWrite;
@@ -29,21 +30,14 @@
             SetYbox(sRead.ReadLine());
             SetZbox(sRead.ReadLine());
             SetConf(sRead.ReadLine());
+            SetImageRate(sRead.ReadLine());
             sRead.Close();
-            content = "Set Server IP To: " + HostSet;
-
-            Connection.Connect(HostSet);
-
-            if (Connection.s == null)
-            {
-                content = "Unable To Connect... Try again";
-                return;
-            }
-            else
-            {
-                content = "Connected To: " + HostSet;
-                SceneManager.LoadScene("Mesh3D");
-            }
+            content = "Set Server IP To:  " + HostSet
+                + "\nSet Width To:  " + xVal
+                + "\nSet Height To:  " + yVal
+                + "\nSet Depth To:  " + zVal
+                + "\nSet Conf To:  " + cVal
+                + "\nSet Image Capture Rate To:  " + imVal;
         }
 
         private void ReadFile()
@@ -65,7 +59,8 @@
             sWrite.WriteLine(xVal);
             sWrite.WriteLine(yVal);
             sWrite.WriteLine(zVal);
-            sWrite.WriteLine(cVal);
+            sWrite.WriteLine(Mesh3DController.setConf.ToString());
+            sWrite.WriteLine(imVal);
             sWrite.Close();
 
         }
@@ -135,6 +130,16 @@
 
         }
 
+        public void SetImageRate(string im_val)
+        {
+            imVal = im_val;
+            float imfloat_val = float.Parse(im_val);
+            float im_interval = 1f / imfloat_val;
+            Mesh3DController.s_FrameRateUpdateInterval = im_interval;
+            content = "Set Image Capture Rate To: " + im_val + " Per a Second";
+
+        }
+ 
         public void SetXbox(string xString)
         {
             xVal = xString;
@@ -151,10 +156,11 @@
         {
             yVal = yString;
             float yfloat = float.Parse(yString);
-            float yMin = 0 - (yfloat / 2);
+            float yMin = 0.1f - yfloat;
             float yMax = 0 + (yfloat / 2);
             Mesh3DController.minVals.y = yMin;
             Mesh3DController.maxVals.y = yMax;
+            Mesh3DController.yConst = yMax;
             content = "Set Y Range To:  " + yMin + " --> " + yMax + " Metres";
 
         }

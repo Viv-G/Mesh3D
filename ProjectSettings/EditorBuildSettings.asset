@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/GoogleARCore/Mesh3D/Scenes/Mesh3D.unity
     guid: e6a6fa04348cb45c9b0221eb19c946da
+  - enabled: 1
+    path: Assets/GoogleARCore/Mesh3D/Scenes/Exit.unity
+    guid: 6993e405b75a72f478bce989fbc6cd65
   m_configObjects: {}
