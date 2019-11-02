@@ -85,11 +85,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12244}
     - Class: 114
-      Script: {instanceID: 12848}
+      Script: {instanceID: 12850}
     - Class: 114
-      Script: {instanceID: 12880}
+      Script: {instanceID: 12882}
     - Class: 114
-      Script: {instanceID: 12902}
+      Script: {instanceID: 12904}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -140,9 +140,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12244}
     - Class: 114
-      Script: {instanceID: 12880}
+      Script: {instanceID: 12414}
     - Class: 114
-      Script: {instanceID: 15538}
+      Script: {instanceID: 12882}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -217,11 +217,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12388}
     - Class: 114
-      Script: {instanceID: 12454}
+      Script: {instanceID: 12456}
     - Class: 114
-      Script: {instanceID: 12564}
+      Script: {instanceID: 12566}
     - Class: 114
-      Script: {instanceID: 12880}
+      Script: {instanceID: 12882}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -745,6 +745,12 @@ ScriptsOnlyBuild:
     className: DetectedPlaneVisualizer
   - hash:
       serializedVersion: 2
+      Hash: f6ce517cfe441140f4658698ab4831e5
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: GoogleARCore.Mesh3D
+    className: ExitScript
+  - hash:
+      serializedVersion: 2
       Hash: 1db723b554a361a812257e508051085f
     assemblyName: Assembly-CSharp.dll
     namespaceName: GoogleARCore
@@ -893,12 +899,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
-  - hash:
-      serializedVersion: 2
-      Hash: f6ce517cfe441140f4658698ab4831e5
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: GoogleARCore.Mesh3D
-    className: ExitScript
   platform: 13
   scenePathNames:
   - Assets/GoogleARCore/Mesh3D/Scenes/Entry.unity

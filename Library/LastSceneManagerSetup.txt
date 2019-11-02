@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/GoogleARCore/Mesh3D/Scenes/Mesh3D.unity
+- path: Assets/GoogleARCore/Mesh3D/Scenes/Entry.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

@@ -135,8 +135,8 @@
             imVal = im_val;
             float imfloat_val = float.Parse(im_val);
             float im_interval = 1f / imfloat_val;
-            Mesh3DController.s_FrameRateUpdateInterval = im_interval;
-            content = "Set Image Capture Rate To: " + im_val + " Per a Second";
+            Mesh3DController.s_FrameRateUpdateInterval = imfloat_val;
+            content = "Set Image Capture Interval To: " + im_val + "Seconds";
 
         }
  

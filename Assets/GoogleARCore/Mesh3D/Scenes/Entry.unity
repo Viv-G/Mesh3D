@@ -938,7 +938,7 @@ MonoBehaviour:
     m_BestFit: 1
     m_MinSize: 4
     m_MaxSize: 40
-    m_Alignment: 1
+    m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -1375,13 +1375,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 701314162}
   m_TextComponent: {fileID: 334468464}
   m_Placeholder: {fileID: 1431013076}
-  m_ContentType: 2
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 4
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 1
+  m_CharacterValidation: 0
   m_CharacterLimit: 16
   m_OnEndEdit:
     m_PersistentCalls:
@@ -3410,7 +3410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d181bf6b4ad464947b4da2dc5e4f93f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Text_Status: {fileID: 0}
+  Text_Status: {fileID: 495374649}
 --- !u!114 &1640393150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4756,7 +4756,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Images Per Second
+  m_Text: Images Interval
 --- !u!222 &2122911140
 CanvasRenderer:
   m_ObjectHideFlags: 0
