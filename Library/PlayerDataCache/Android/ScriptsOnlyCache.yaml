@@ -15,11 +15,8 @@ ScriptsOnlyBuild:
     - GoogleARCore.Mesh3D.ExitScript
     - GoogleARCore.Mesh3D.Mesh3DController
     - GoogleARCore.Mesh3D.PointcloudVisualizer
-    Unity.Mobile.AndroidLogcat.Editor.dll:
-    - Unity.Android.Logcat.AndroidLogcatConsoleWindow
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
-    - UnityEditor.TestTools.TestRunner.TestListCacheData
     UnityEngine.SpatialTracking.dll:
     - UnityEngine.SpatialTracking.TrackedPoseDriver
     UnityEngine.UI.dll:
@@ -61,35 +58,35 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 9752}
+      Script: {instanceID: 9756}
     - Class: 114
-      Script: {instanceID: 10062}
+      Script: {instanceID: 10066}
     - Class: 114
-      Script: {instanceID: 10068}
+      Script: {instanceID: 10072}
     - Class: 114
-      Script: {instanceID: 10132}
+      Script: {instanceID: 10136}
     - Class: 114
-      Script: {instanceID: 10632}
+      Script: {instanceID: 10636}
     - Class: 114
-      Script: {instanceID: 10782}
+      Script: {instanceID: 10786}
     - Class: 114
-      Script: {instanceID: 11130}
+      Script: {instanceID: 11134}
     - Class: 114
-      Script: {instanceID: 11278}
+      Script: {instanceID: 11282}
     - Class: 114
-      Script: {instanceID: 11468}
+      Script: {instanceID: 11472}
     - Class: 114
-      Script: {instanceID: 11766}
+      Script: {instanceID: 11770}
     - Class: 114
-      Script: {instanceID: 12042}
+      Script: {instanceID: 12046}
     - Class: 114
-      Script: {instanceID: 12244}
+      Script: {instanceID: 12248}
     - Class: 114
-      Script: {instanceID: 12850}
+      Script: {instanceID: 12854}
     - Class: 114
-      Script: {instanceID: 12882}
+      Script: {instanceID: 12886}
     - Class: 114
-      Script: {instanceID: 12904}
+      Script: {instanceID: 12908}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -128,21 +125,21 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 9752}
+      Script: {instanceID: 9756}
     - Class: 114
-      Script: {instanceID: 10062}
+      Script: {instanceID: 10066}
     - Class: 114
-      Script: {instanceID: 10132}
+      Script: {instanceID: 10136}
     - Class: 114
-      Script: {instanceID: 10782}
+      Script: {instanceID: 10786}
     - Class: 114
-      Script: {instanceID: 11468}
+      Script: {instanceID: 11472}
     - Class: 114
-      Script: {instanceID: 12244}
+      Script: {instanceID: 12248}
     - Class: 114
-      Script: {instanceID: 12414}
+      Script: {instanceID: 12418}
     - Class: 114
-      Script: {instanceID: 12882}
+      Script: {instanceID: 12886}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -183,45 +180,45 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 9752}
+      Script: {instanceID: 9756}
     - Class: 114
-      Script: {instanceID: 10062}
+      Script: {instanceID: 10066}
     - Class: 114
-      Script: {instanceID: 10132}
+      Script: {instanceID: 10136}
     - Class: 114
-      Script: {instanceID: 10662}
+      Script: {instanceID: 10666}
     - Class: 114
-      Script: {instanceID: 10676}
+      Script: {instanceID: 10680}
     - Class: 114
-      Script: {instanceID: 10782}
+      Script: {instanceID: 10786}
     - Class: 114
-      Script: {instanceID: 10816}
+      Script: {instanceID: 10820}
     - Class: 114
-      Script: {instanceID: 10862}
+      Script: {instanceID: 10866}
     - Class: 114
-      Script: {instanceID: 11032}
+      Script: {instanceID: 11036}
     - Class: 114
-      Script: {instanceID: 11234}
+      Script: {instanceID: 11238}
     - Class: 114
-      Script: {instanceID: 11278}
+      Script: {instanceID: 11282}
     - Class: 114
-      Script: {instanceID: 11468}
+      Script: {instanceID: 11472}
     - Class: 114
-      Script: {instanceID: 11850}
+      Script: {instanceID: 11854}
     - Class: 114
-      Script: {instanceID: 11958}
-    - Class: 114
-      Script: {instanceID: 12244}
+      Script: {instanceID: 11962}
     - Class: 114
       Script: {instanceID: 12248}
     - Class: 114
-      Script: {instanceID: 12388}
+      Script: {instanceID: 12252}
     - Class: 114
-      Script: {instanceID: 12456}
+      Script: {instanceID: 12392}
     - Class: 114
-      Script: {instanceID: 12566}
+      Script: {instanceID: 12460}
     - Class: 114
-      Script: {instanceID: 12882}
+      Script: {instanceID: 12570}
+    - Class: 114
+      Script: {instanceID: 12886}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -481,7 +478,7 @@ ScriptsOnlyBuild:
     className: ControlPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: 477d50598a3ace695ac526678ba26c92
+      Hash: cb70d2e02a02c37e16fd41bc9ef2babc
     assemblyName: Assembly-CSharp.dll
     namespaceName: GoogleARCore.Mesh3D
     className: Mesh3DController
@@ -904,4 +901,4 @@ ScriptsOnlyBuild:
   - Assets/GoogleARCore/Mesh3D/Scenes/Entry.unity
   - Assets/GoogleARCore/Mesh3D/Scenes/Mesh3D.unity
   - Assets/GoogleARCore/Mesh3D/Scenes/Exit.unity
-  playerPath: F:/Viv/Documents/Uni/sem1_2019/FYP/unity/AR12-master/AR12_Scenes.apk
+  playerPath: /Users/Viv/Unity/AR12-master/Mesh3D.apk
