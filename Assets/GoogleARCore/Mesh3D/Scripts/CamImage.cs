@@ -1,7 +1,6 @@
 ﻿namespace GoogleARCore.Mesh3D
 {
     using System;
-    using System.Collections.Generic;
     using GoogleARCore;
     using UnityEngine;
     using OpenCvSharp;
@@ -10,8 +9,13 @@
     public class CamImage : MonoBehaviour
     {
 
-        //public static List<Mat> AllData = new List<Mat>();
-
+        /// <summary>
+        /// Captures a YUV420888 image from the devices CPU, using ARCores CameraImageBytes class
+        /// Image is then converted to RGB using OpenCV+ A free plugin based on OpenCV Sharp
+        /// Image is then rotated and flipped to align with the viewport.
+        /// Adds images to a List of Mat Arrays, which can be converted to JPG using Unity Textures at a later date
+        /// NOTE: No Unity classes are used in this function to ensure that it is thread safe (Unity itself is not threadsafe).
+        /// </summary>
         public static void GetCameraImage()
         {
 
@@ -22,13 +26,10 @@
                 // If acquiring failed, return null
                 if (!camBytes.IsAvailable)
                 {
-                    Mesh3DController.ErrorString = "camBytes Not Available.....";
                     return;
                 }
 
-                    Mesh3DController.ErrorString = "Thread Running.....";
                 // To save a YUV_420_888 image, you need 1.5*pixelCount bytes.
-                // I will explain later, why.
                 byte[] YUVimage = new byte[(int)(camBytes.Width * camBytes.Height * 1.5f)];
 
                 // As CameraImageBytes keep the Y, U and V data in three separate
@@ -57,7 +58,7 @@
                 Mat input = new Mat(camBytes.Height + camBytes.Height / 2, camBytes.Width, MatType.CV_8UC1, pointerYUV);
                 Mat output = new Mat(camBytes.Height, camBytes.Width, MatType.CV_8UC3);
 
-                Cv2.CvtColor(input, output, ColorConversionCodes.YUV2BGR_NV12);// YUV2RGB_NV12);
+                Cv2.CvtColor(input, output, ColorConversionCodes.YUV2BGR_NV12);
 
                 // FLIP AND TRANPOSE TO VERTICAL
                 Cv2.Transpose(output, output);

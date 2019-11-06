@@ -1,21 +1,7 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="HelloARController.cs" company="Google">
-//
-// Copyright 2017 Google Inc. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-// </copyright>
+//Mesh3DController.cs
+//Controller for the main scene
+//Handles each frame update, alongside managing communication and image capture threading
 //-----------------------------------------------------------------------
 
 namespace GoogleARCore.Mesh3D
@@ -58,11 +44,6 @@ namespace GoogleARCore.Mesh3D
         public GameObject GameObjectHorizontalPlanePrefab;
 
         /// <summary>
-        /// A prefab to place when a raycast from a user touch hits a feature point.
-        /// </summary>
-//        public GameObject GameObjectPointPrefab;
-
-        /// <summary>
         /// The rotation in degrees need to apply to prefab when it is placed.
         /// </summary>
         private const float k_PrefabRotation = 180.0f;
@@ -85,7 +66,6 @@ namespace GoogleARCore.Mesh3D
         private int m_HighestResolutionConfigIndex = 0;
         private int m_LowestResolutionConfigIndex = 0;
         private bool m_Resolutioninitialized = false;
-        private Text m_ImageTextureToggleText;
         private float m_RenderingFrameRate = 0f;
         private float m_RenderingFrameTime = 0f;
         private int m_FrameCounter = 0;
@@ -128,10 +108,18 @@ namespace GoogleARCore.Mesh3D
         public static float setConf = 0.5f;
 
         public float Dplane;
+
+        /// <summary>
+        /// Flags to track progress
+        /// </summary>
         public static bool planeFlag = false;
         private bool AnchorFlag = false;
         private bool pointFlag = false;
         private bool imFlag = false;
+
+        /// <summary>
+        /// Anchor to ensure points stay updated
+        /// </summary>
         private Anchor anchorPoints;
 
         public static List<Mat> AllData = new List<Mat>();
@@ -139,8 +127,6 @@ namespace GoogleARCore.Mesh3D
 
         private Thread _t1;
         private Thread _t2;
-
-        public Canvas CanvasMain;
 
         public static string ErrorString;
 
@@ -172,28 +158,18 @@ namespace GoogleARCore.Mesh3D
             }
         }
 
-        public void Start()
-        {
-            m_OnChoseCameraConfiguration = _ChooseCameraConfiguration;
-            ARSessionManager.RegisterChooseCameraConfigurationCallback(m_OnChoseCameraConfiguration);
-            ARSessionManager.enabled = false;
-            ARSessionManager.enabled = true;
-        }
-
         /// <summary>
         /// The Unity Update() method.
         /// </summary>
         public void Update()
         {
             _UpdateApplicationLifecycle();
-            ExportMeshPoints();
+            _ExportMeshPoints();
             _UpdateFrameRate();
 
-           // Debug.Log(ErrorString);
             /// Update Camera Intrinsics///
             var cameraIntrinsics = Frame.CameraImage.ImageIntrinsics;
             string intrinsicsType = "CPU Image";
-            //HelloARController.
             CameraIntrinsicsOutput.text = _CameraIntrinsicsToString(cameraIntrinsics, intrinsicsType);
 
             // If the player has not touched the screen, we are done with this update.
@@ -231,26 +207,25 @@ namespace GoogleARCore.Mesh3D
                         GameObject prefab;
                         DetectedPlane detectedPlane = hit.Trackable as DetectedPlane;
 
+                        //Get centre point of the plane and use its y value to set as floor of model.
+                        //Floor of model becomes lower bound for bounding box in y direction (vertical)
+                        //update upper bound to match lower bound.
                         Vector3 pCent = detectedPlane.CenterPose.position;
                         minVals.y = (pCent.y + 0.005f);
-                        //maxVals.y = (pCent.y + 2 * (maxVals.y));
                         maxVals.y = (2*yConst) + pCent.y;
 
                         Vector3 pNor = detectedPlane.CenterPose.rotation * Vector3.up;
 
+                        // This was used to track eqn of the plane found, but as it is horizontal no longer needed...
                         /*   float Aeq = pNor.x;
                            float Beq = pNor.y;
                            float Ceq = pNor.z;
                            float Deq = (pNor.x * -pCent.x) + (pNor.y * -pCent.y) + (pNor.z * -pCent.z); */
                         Dplane = -pCent.y; //Deq;
-
-                        //string message = "PLANE EQUATION IS: " + Aeq + " , " + Beq + " , " + Ceq + " , " + Deq + "\n";
                         string message = "PLANE EQUATION IS: "+ Dplane;
                         Debug.Log(message);
 
                         prefab = GameObjectHorizontalPlanePrefab;
-
-
                         // Instantiate prefab at the hit pose.
                         var gameObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
 
@@ -284,15 +259,11 @@ namespace GoogleARCore.Mesh3D
                 m_RenderingFrameRate = 1000 / m_RenderingFrameTime;
                 m_FramePassedTime = 0f;
                 m_FrameCounter = 0;
-                /*if (((_t1.ThreadState & (ThreadState.Stopped | ThreadState.Unstarted)) == 0))
+                if (((_t1.ThreadState & (ThreadState.Stopped | ThreadState.Unstarted)) == 0) & imFlag)
                 {
                     Debug.Log("PAUSED");
                     _t1.Join();
-                } */
-                if (imFlag)
-                {
-                    _t1.Join();
-                }
+                } 
                 _t1 = new Thread(CamImage.GetCameraImage);
                 _t1.Start();
                 imFlag = true;
@@ -370,8 +341,6 @@ namespace GoogleARCore.Mesh3D
                         minimalConfig = config;
                     }
                 }
-
-
                 m_Resolutioninitialized = true;
             }
 
@@ -379,7 +348,6 @@ namespace GoogleARCore.Mesh3D
             {
                 return m_HighestResolutionConfigIndex;
             }
-
             return m_LowestResolutionConfigIndex; 
         }
 
@@ -391,8 +359,7 @@ namespace GoogleARCore.Mesh3D
             // Exit the app when the 'back' button is pressed.
             if (Input.GetKey(KeyCode.Escape))
             {
-                ExportImages();
-             //   Application.Quit();
+                Application.Quit();
             }
 
             // Only allow the screen to sleep when not tracking.
@@ -418,17 +385,19 @@ namespace GoogleARCore.Mesh3D
                 m_IsQuitting = true;
                 Invoke("_DoQuit", 0.5f);
             }
-        /*    else if (Session.Status.IsError())
+            else if (Session.Status.IsError())
             {
                 _ShowAndroidToastMessage(
                     "ARCore encountered a problem connecting.  Please start the app again.");
                 m_IsQuitting = true;
                 Invoke("_DoQuit", 0.5f);
-            } */
+            } 
         }
 
         /// <summary>
-        /// Export Images (Send to Server)
+        /// Export Images and Change Scenes.
+        /// Waits for threads to end and closes TCP connection
+        /// Finally, moves to ExitScene
         /// </summary>
 
         public void ExportImages()
@@ -447,55 +416,37 @@ namespace GoogleARCore.Mesh3D
             sr.WriteLine(CameraIntrinsicsOutput.text);
             Debug.Log(CameraIntrinsicsOutput.text);
             sr.Close();
+
+            /// Close the TCP connection used for sending points
             if (Connection.s.Connected)
             {
                 Connection.s.Close();
             }
+            /// Load exit scene
             SceneManager.LoadScene("Exit");
-            /*ConExit.ConnectOut();
-
-            if (ConExit.SendArrayCount(AllData.Count))
-            {
-                CameraIntrinsicsOutput.text = "Sending " + AllData.Count + "Images";
-                // Loop through Mat List, Add to Texture and Save.
-                for (var i = 0; i < AllData.Count; i++)
-                {
-                    Mat imOut = AllData[i];
-                    Texture2D result = Unity.MatToTexture(imOut);
-                    result.Apply();
-
-                    byte[] im = result.EncodeToJPG(100);
-                    //AllBytes.Add(im);
-
-                     ConExit.SendIM(im);
-
-                    CameraIntrinsicsOutput.text = "Succesfully Sent Image " + i + "\n Remaining: " + (AllData.Count - i);
-                    //Debug.Log(messge);
-                    Destroy(result);
-                }
-                CameraIntrinsicsOutput.text = "Success! Exciting...";
-            }
-            //Connection.s.Close();
-            ConExit.sOut.Close();
-            Application.Quit(); */
         }
 
 
-        public void ExportMeshPoints()
+        /// <summary>
+        /// ExportMeshPoints
+        /// Fetches current point cloud and takes new points that fall inside bounding box
+        /// Checks confidence of the points, if > conf, adds them to the buffer to be sent and displays to user.
+        /// Finally, waits for previous thread to finish and starts new one with current frame of data.
+        /// </summary>
+        public void _ExportMeshPoints()
         {
             string buff = "";
             m_Track = 0;
-           // Debug.Log("1_Started Export Points");
 
+            /// If it is the first frame with points, create anchor and use it to ensure points stay as accurate as possible
             if (AnchorFlag == false && (Session.Status == SessionStatus.Tracking)) {
-                //Vector3 AnchorVec = new Vector3(0f, maxVals.y / 2f, maxVals.z / 2f);
                 Vector3 AnchorVec = new Vector3(0f, 0f, 0f);
                 Pose AnchorPose = new Pose(AnchorVec, Quaternion.identity);
                 anchorPoints = Session.CreateAnchor(AnchorPose);
                 AnchorFlag = true;
-            //    Debug.Log("2_Set Points Anchor");
                     }
 
+            /// Check for new points, dont bother handling points that haven't been updated
             if (Frame.PointCloud.PointCount > 0 && Frame.PointCloud.IsUpdatedThisFrame)
             {
                 string dPlaneString = Dplane + " ";
@@ -503,45 +454,43 @@ namespace GoogleARCore.Mesh3D
                 curPose = Frame.Pose;
                 string curPosePos = curPose.position.x + " " + curPose.position.y + " " + curPose.position.z + " ";
                 buff += curPosePos;
-           //     Debug.Log("3_Stepped into First stage (New points + > 0)");
 
+                /// Loop through point cloud and get each point, confidence and ID
                 for (int i = 0; i < Frame.PointCloud.PointCount; i++)
                 {
-                    
-                    Vector3 point = Frame.PointCloud.GetPointAsStruct(i); // -UNTRANSFORMED                
+                    Vector3 point = Frame.PointCloud.GetPointAsStruct(i);             
                     int idPoint = Frame.PointCloud.GetPointAsStruct(i).Id;
                     float conf = Frame.PointCloud.GetPointAsStruct(i).Confidence;
                     Vector3 pointN = anchorPoints.transform.InverseTransformPoint(point);
 
+                    /// If point is out of bonds, ignore it
                     if (pointN.x < minVals.x || pointN.y < minVals.y || pointN.z < minVals.z ||
                         pointN.x > maxVals.x || pointN.y > maxVals.y || pointN.z > maxVals.z || conf < setConf)
                     {
                         continue;
                     }
-                   
+                    /// Display Point
                     PointcloudVisualizer.AddPointToCache(pointN);
+                    /// Add point to buffer
                     string content = idPoint + " " + pointN.x + " " + pointN.y + " " + pointN.z + " ";
                     buff += content;
-
                     m_Track += 1;
-
                 }
+
+                /// If there are new points this frame, start new thread and send points
                 if (m_Track != 0)
                 {
-               //     Debug.Log("6_Starting thread and sending pts (Mtrack > 0");
                     string[] ptsStringArray = new string[2];
                     ptsStringArray[0] = m_Track.ToString();
                     ptsStringArray[1] = buff;
-                    if (pointFlag)
+                    if (((_t2.ThreadState & (ThreadState.Stopped | ThreadState.Unstarted)) == 0) & pointFlag)
                     {
+                        Debug.Log("PAUSED Sending Points");
                         _t2.Join();
                     }
                     _t2 = new Thread(Connection.WriteString);
                     _t2.Start(ptsStringArray);
                     pointFlag = true;
-                   // Connection.WriteString(ptsStringArray);
-                  //  Connection.WriteString(m_Track, buff);
-                   // Debug.Log(m_Track + buff);
                 }
             }
         }

@@ -117,39 +117,6 @@ namespace GoogleARCore.Mesh3D
         /// </summary>
         private static LinkedList<PointInfo> m_CachedPoints;
 
-    /*    /// <summary>
-        /// Current Camera Pose
-        /// </summary>
-        public Pose curPose = Pose.identity;
-
-        /// <summary>
-        /// Tracking Variable for points to send
-        /// </summary>
-        private int m_Track;
-
-        /// <summary>
-        /// Tracking Variable for total frames
-        /// </summary>
-        private int m_Frames;
-
-        /// <summary>
-        /// Min values for bounding box
-        /// </summary>
-        public static Vector3 minVals = new Vector3(-0.25f, -1f, 0.1f);
-
-
-        /// <summary>
-        /// Max values for bounding box
-        /// </summary>
-        public static Vector3 maxVals = new Vector3(0.25f, 0.1f, .75f);
-
-        /// <summary>
-        /// Default Confidence Value
-        /// </summary>
-        public static float setConf = 0.25f;
-
-        public static float Dplane;
-*/
         /// <summary>
         /// The Unity Start() method.
         /// </summary>
@@ -209,64 +176,8 @@ namespace GoogleARCore.Mesh3D
                 _UpdateColor();
             }
 
-            /*            if (EnablePopAnimation)
-                        {
-                            _AddPointsIncrementallyToCache();
-                            _UpdatePointSize();
-                        } 
-                        else
-                        {
-                            _AddAllPointsToCache();
-                        } */
-
-            //ExportMeshPoints();
-
             _UpdateMesh();
         }
-
-        /* public void ExportMeshPoints()
-        {
-            string buff = "";
-            m_Track = 0;
-
-            if (Frame.PointCloud.PointCount > 0 && Frame.PointCloud.IsUpdatedThisFrame)
-            {
-                string dPlaneString = Dplane + " ";
-                buff = dPlaneString;
-                curPose = Frame.Pose;
-                string curPosePos = curPose.position.x + " " + curPose.position.y + " " + curPose.position.z + " ";               
-                buff += curPosePos;
-
-
-                for (int i = 0; i < Frame.PointCloud.PointCount; i++)
-                {
-                    Vector3 point = Frame.PointCloud.GetPointAsStruct(i); // -UNTRANSFORMED                
-                    int idPoint = Frame.PointCloud.GetPointAsStruct(i).Id;
-                    float conf = Frame.PointCloud.GetPointAsStruct(i).Confidence;
-
-                    if (point.x < minVals.x || point.y < minVals.y || point.z < minVals.z ||
-                        point.x > maxVals.x || point.y > maxVals.y || point.z > maxVals.z || conf < setConf)
-                    {
-                        continue;
-                    }
-
-                    _AddPointToCache(point);
-                    string content = idPoint + " " + point.x + " " + point.y + " " + point.z + " ";
-                    buff += content;
-
-                    m_Track += 1;
-
-                }
-                if (m_Track != 0)
-                {
-                    HelloAR.Connection.WriteString(m_Track, buff);
-                }
-                
-            }
-        } */
-
-
-
 
         /// <summary>
         /// Clears all cached feature points.

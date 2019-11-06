@@ -1,7 +1,5 @@
 ﻿namespace GoogleARCore.Mesh3D
 {
-    using System.Collections;
-    using System.Collections.Generic;
     using System.IO;
     using UnityEngine;
     using UnityEngine.UI;
@@ -9,6 +7,9 @@
 
     public class EntryScript : MonoBehaviour
     {
+        /// <summary>
+        /// Default IP Address
+        /// </summary>
         public static string HostSet = "192.168.8.118";
         public Text Text_Status;
         private string content;
@@ -18,8 +19,10 @@
         private string cVal;
         private string imVal;
 
-        // private StreamReader sRead; //= new StreamWriter(path, append: true);
-        //private StreamWriter sWrite;
+        /// <summary>
+        /// Loads last used settings
+        /// Triggered via GUI button
+        /// </summary>
         public void QuickStart()
         {
             content = "Using Last Settings...:";
@@ -40,17 +43,23 @@
                 + "\nSet Image Capture Rate To:  " + imVal;
         }
 
+        /// <summary>
+        /// Reads last used IP Address from file
+        /// Triggered via GUI button
+        /// </summary>
         private void ReadFile()
         {
             string path = Application.persistentDataPath + @"/previousData.txt";
             StreamReader sRead = new StreamReader(path, System.Text.Encoding.ASCII);
             HostSet = sRead.ReadLine();
-            SetXbox(sRead.ReadLine());
             sRead.Close();
             content = "Set Server IP To: " + HostSet;
-            //DO READ FILE AND WRITE PREVIOUS IP TO HOSTSET
+            
         }
 
+        /// <summary>
+        /// Saves the current settings to file, called everytime app is run
+        /// </summary>
         private void WriteFile()
         {
             string path = Application.persistentDataPath + @"/previousData.txt";
@@ -65,6 +74,10 @@
 
         }
 
+        /// <summary>
+        /// Sets IP address if dropdown is used
+        /// </summary>
+        /// <param name="val">int val is set from dropdown, 0 starts as default, 1 = option 1... etc</param>
         public void SetIP(int val)
         {
             switch (val)
@@ -94,7 +107,10 @@
 
             content = "Set Server IP To: " + HostSet;
         }
-
+        /// <summary>
+        /// Manual IP address entry field
+        /// </summary>
+        /// <param name="Host">String Host takes manaul ip address and overwrites default</param>
         public void SetIpMan(string Host)
         {
             HostSet = Host;
@@ -102,7 +118,9 @@
 
         }
 
-
+        /// <summary>
+        /// Load the main scene, connect to Server and enter the scene
+        /// </summary>
         public void LoadScene()
         {
             WriteFile();
@@ -120,7 +138,10 @@
             }
         }
 
-
+        /// <summary>
+        /// Set minimum confidence value for points
+        /// </summary>
+        /// <param name="c_val">Lower bound of confidence value</param>
         public void SetConf(string c_val)
         {
             cVal = c_val;
@@ -130,6 +151,10 @@
 
         }
 
+        /// <summary>
+        /// Sets desired image capture interval
+        /// </summary>
+        /// <param name="im_val">string im_val, desired amount of seconds to wait, entered via keyboard</param>
         public void SetImageRate(string im_val)
         {
             imVal = im_val;
@@ -139,7 +164,11 @@
             content = "Set Image Capture Interval To: " + im_val + "Seconds";
 
         }
- 
+
+        /// <summary>
+        /// Sets x bounding box values
+        /// </summary>
+        /// <param name="xString">width of box</param>
         public void SetXbox(string xString)
         {
             xVal = xString;
@@ -152,6 +181,10 @@
 
         }
 
+        /// <summary>
+        /// Sets y bounding box values
+        /// </summary>
+        /// <param name="yString">height of box, adjustments made to true height to better suit user input</param>
         public void SetYbox(string yString)
         {
             yVal = yString;
@@ -164,7 +197,10 @@
             content = "Set Y Range To:  " + yMin + " --> " + yMax + " Metres";
 
         }
-
+        /// <summary>
+        /// Sets depth of bounding box
+        /// </summary>
+        /// <param name="zString">depth of the box as a string</param>
         public void SetZbox(string zString)
         {
             zVal = zString;
@@ -184,11 +220,6 @@
         /// </summary>
         private bool m_IsQuitting = false;
 
-
-        // Start is called before the first frame update
-        void Start()
-        {
-        }
 
         // Update is called once per frame
         void Update()

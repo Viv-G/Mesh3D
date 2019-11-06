@@ -7,12 +7,12 @@
 
     /// <summary>
     /// Creates Connection to Server and sends data as string
+    /// Tests connection, and then ends each image
     /// </summary>
     ///
     public class ConExit : MonoBehaviour
     {
         private static int port = 6666;
-        //private static string HostIP = "192.168.8.118";
         private static string HostIP = EntryScript.HostSet;
         public static int pCount;
         public static Socket sOut = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -86,6 +86,13 @@
             return false;
         }
 
+        /// <summary>
+        /// Sends the image to be sent
+        /// Takes the image in bytes, encoded to JPG
+        /// Breaks it into chunks of 4096 bytes
+        /// Sends each chunk until complete
+        /// </summary>
+        /// <param name="im">Image in bytes to be sent</param>
         public static void SendIM(byte[] im)
         {
             pCount++;
@@ -123,50 +130,10 @@
                 string errMessage = "ERROR_sending: " + e.Message + " " + e.ErrorCode;
                 Debug.LogError(errMessage);
             }
-            //   Debug.Log("Sucessfully Sent IMAGE ");
             byte[] recBuf = new byte[4096];
             sOut.Receive(recBuf, 4096, 0);
             string imRec = Encoding.ASCII.GetString(recBuf);
             Debug.Log("Answer = " + imRec);
-
-
-
-            /*    byte[] recBuf = new byte[4096];
-                sOut.Receive(recBuf, 4096, 0);
-                string sizRec = Encoding.ASCII.GetString(recBuf);
-                Debug.Log("Answer = " + sizRec);
-                string compareString = "RSIZE";
-                int stcmp = string.Compare(sizRec, compareString);
-                if (stcmp == 0)
-                {
-                    Debug.Log("Sending IMAGE");
-                    try
-                    {
-                        int i = sOut.Send(im);
-                        string byteStringLog = "Sent " + i + " Bytes...";
-                        Debug.Log("byteStringLog");
-                        Debug.Log("Sucessfully Sent IMAGE ");
-                    }
-                    catch (SocketException e)
-                    {
-                        string errMessage = "ERROR: " + e.Message + " " + e.ErrorCode;
-                        Debug.LogError(errMessage);
-                    }
-                 //   Debug.Log("Sucessfully Sent IMAGE ");
-                    recBuf = new byte[4096];
-                    sOut.Receive(recBuf, 4096, 0);
-                    string imRec = Encoding.ASCII.GetString(recBuf);
-                    Debug.Log("Answer = " + imRec);
-                    string comString = "GOT IMAGE";
-                    stcmp = string.Compare(imRec, comString);
-                    if (stcmp == 0)
-                    {
-                        string endComms = "BYE";
-                        byte[] endCommsB = Encoding.ASCII.GetBytes(endComms);
-                        sOut.Send(endCommsB);
-                        Debug.Log("Succesfully Sent Image " + pCount);
-                    } */
-
         }
     }
 }

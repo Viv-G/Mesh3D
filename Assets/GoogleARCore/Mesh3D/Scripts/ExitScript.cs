@@ -1,21 +1,15 @@
 ﻿namespace GoogleARCore.Mesh3D
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
     using UnityEngine;
     using UnityEngine.UI;
-    using UnityEngine.SceneManagement;
     using System;
-    using System.Threading;
-    using GoogleARCore;
-    using UnityEngine.EventSystems;
     using OpenCvSharp;
 
     public class ExitScript : MonoBehaviour
     {
         public Text Text_Status;
         private string content;
+
         /// <summary>
         /// True if the app is in the process of quitting due to an ARCore connection error,
         /// otherwise false.
@@ -25,10 +19,12 @@
         // Start is called before the first frame update
         void Start()
         {
+            //Update screen to reflect points to be sent
             content = "Sending " + Mesh3DController.AllData.Count + " Images";
             Debug.Log(content);
             Text_Status.text = content;
 
+            //Create connection to Server and test it
             ConExit.ConnectOut();
             ConExit.SendArrayCount(Mesh3DController.AllData.Count);
 
@@ -64,6 +60,11 @@
             _UpdateApplicationLifecycle();
         }
 
+        /// <summary>
+        /// Sends images to the server
+        /// Encodes image to jpg and then sends it
+        /// Updates display to show progress
+        /// </summary>
         private void ExitSendImages()
         {
               
